@@ -55,8 +55,6 @@ class BooksController extends ApiController
 
         Book::create(Input::all());
 
-        return $this->setStatusCode(201)->respond([
-            'message' => 'Book successfully created.'
-        ]);
+        return $this->respondCreated('Book successfully created.');
     }
 }
