@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Input;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -20,6 +21,11 @@ class BooksController extends ApiController
 
     function __construct(BookTransformer $bookTransformer) {
         $this->bookTransformer = $bookTransformer;
+
+        //old way - filters
+        //$this->beforeFilter(['auth.basic', ['on' => 'post']]);
+        //new way - middleware
+        $this->middleware('auth.basic', ['only' => 'store']);
     }
 
     public function index() {
@@ -43,6 +49,14 @@ class BooksController extends ApiController
     }
 
     public function store() {
-        dd('store');
+        if(!Input::get('title') or !Input::get('author') or !Input::get('description')) {
+            return $this->setStatusCode(422)->respondWithError('Parameters failed validation for book.');
+        }
+
+        Book::create(Input::all());
+
+        return $this->setStatusCode(201)->respond([
+            'message' => 'Book successfully created.'
+        ]);
     }
 }
