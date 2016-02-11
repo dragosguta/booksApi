@@ -7,45 +7,38 @@ use Illuminate\Support\Facades\Response;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Transformers\BookTransformer;
 
 use App\Book;
 
-class BooksController extends Controller
+class BooksController extends ApiController
 {
+    /**
+     * @var Transformers\BookTransformer
+     */
+    protected $bookTransformer;
+
+    function __construct(BookTransformer $bookTransformer) {
+        $this->bookTransformer = $bookTransformer;
+    }
+
     public function index() {
         $books = Book::all();
 
-        return Response::json([
-            'data' => $this->transformCollection($books)
-        ], 200);
+        return $this->setStatusCode(200)->respond([
+            'data' => $this->bookTransformer->transformCollection($books->toArray())
+        ]);
     }
 
     public function show($id) {
         $book = Book::find($id);
 
         if(!$book) {
-            return Response::json([
-                'error' => [
-                'message' => 'Book does not exist'
-                ]
-            ], 404);
+            return $this->respondNotFound('Book does not exist.');
         }
 
-        return Response::json([
-            'data' => $this->transform($book->toArray())
-        ], 200);
-    }
-
-    private function transformCollection($books) {
-        return array_map([$this, 'transform'], $books->toArray());
-    }
-
-    private function transform($book) {
-        return [
-        'title' => $book['title'],
-        'author' => $book['author'],
-        'description' => $book['description'],
-        'checked out' => (boolean) $book['some_bool']
-        ];
+        return $this->setStatusCode(200)->respond([
+            'data' => $this->bookTransformer->transform($book)
+        ]);
     }
 }
