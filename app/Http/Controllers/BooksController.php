@@ -41,4 +41,8 @@ class BooksController extends ApiController
             'data' => $this->bookTransformer->transform($book)
         ]);
     }
+
+    public function store() {
+        dd('store');
+    }
 }

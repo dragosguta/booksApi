@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['prefix' => 'api/v1'], function() {
+    Route::resource('books', 'BooksController');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -27,7 +31,4 @@ Route::get('/', function () {
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::group(['prefix' => 'api/v1'], function() {
-        Route::resource('books', 'BooksController');
-    });
 });
