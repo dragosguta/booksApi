@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     //Protect against mass assignment
-    protected $fillable = ['title', 'author', 'description'];
+    protected $fillable = ['title', 'author', 'description', 'some_bool'];
 
     public function tags() {
         return $this->belongsToMany('App\Tag');

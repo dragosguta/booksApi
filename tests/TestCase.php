@@ -16,6 +16,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
      */
     public function createApplication()
     {
+        //Change to sqlite for testing purposes
+        putenv('DB_CONNECTION=sqlite_testing');
+
         $app = require __DIR__.'/../bootstrap/app.php';
 
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
