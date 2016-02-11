@@ -18,7 +18,8 @@ class BooksTableSeeder extends Seeder
             Book::create([
                 'title' => $faker->sentence(1),
                 'author'=> $faker->sentence(1),
-                'description'=> $faker->sentence(5)
+                'description'=> $faker->sentence(5),
+                'some_bool' => $faker->boolean()
             ]);
         }
     }
