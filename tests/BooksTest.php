@@ -3,16 +3,17 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\Book;
+
 
 class BooksTest extends ApiTester {
+
     /** @test */
     public function it_fetches_books() {
         //arrange
-        $this->times(5)->makeBook();
+        $this->times(5)->make('App\Book');
 
         //act
-        $this->getJson('api/v1/books', null);
+        $this->getJson('api/v1/books');
 
         //assert
         $this->assertResponseOk();
@@ -20,7 +21,7 @@ class BooksTest extends ApiTester {
 
     /** @test */
     public function it_fetches_a_single_book() {
-        $this->makeBook();
+        $this->make('App\Book');
 
         $book = $this->getJson('api/v1/books/1')->data;
 
@@ -30,23 +31,33 @@ class BooksTest extends ApiTester {
     }
 
     /** @test */
-    public function it_404s_if_a_lesson_is_not_found() {
+    public function it_404s_if_a_book_is_not_found() {
         $this->getJson('api/v1/lessons/x');
 
         $this->assertResponseStatus(404);
     }
 
-    public function makeBook($bookFields = []) {
+    /** @test */
+    public function it_creates_a_new_book_given_valid_parameters() {
+        //Must authorize
+        $this->getJson('api/v1/books', 'POST', $this->getStub());
 
-        //Use array_merge to override default fields
-        $book = array_merge([
+        $this->assertResponseStatus(201);
+    }
+
+    /** @test */
+    public function it_throws_a_422_if_a_new_book_request_fails_validation() {
+        $this->getJson('api/v1/books', 'POST');
+
+        $this->assertResponseStatus(422);
+    }
+
+    protected function getStub() {
+        return [
             'title' => $this->fake->sentence,
             'author' => $this->fake->sentence,
             'description' => $this->fake->paragraph,
             'some_bool' => $this->fake->boolean
-        ], $bookFields);
-
-        while($this->times--)
-            Book::create($book);
+        ];
     }
 }

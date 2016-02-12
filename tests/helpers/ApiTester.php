@@ -5,12 +5,14 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use Faker\Factory as Faker;
+use App\User;
 
-class ApiTester extends TestCase
+abstract class ApiTester extends TestCase
 {
-    protected $fake;
+    use Factory;
 
-    protected $times = 1;
+    protected $fake;
+    protected $user;
 
     public function __construct() {
         $this->fake = Faker::create();
@@ -19,16 +21,19 @@ class ApiTester extends TestCase
     public function setUp() {
         parent::setUp();
         Artisan::call('migrate');
+        //Create a test user
+        $this->user = User::create([
+            'name'    => 'test',
+            'email'   => 'test@test.com',
+            'password'=> Hash::make('test')
+        ]);
     }
 
-     public function times($count) {
-        $this->times = $count;
+    public function getJson($uri, $method = 'GET', $parameters = []) {
+        if($method == 'POST')
+            Auth::login($this->user);
 
-        return $this;
-    }
-
-    public function getJson($uri) {
-        return json_decode($this->call('GET', $uri)->getContent());
+        return json_decode($this->call($method, $uri, $parameters)->getContent());
     }
 
     public function assertObjectHasAttributes() {
