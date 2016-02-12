@@ -1,0 +1,29 @@
+# Define project language
+language: php
+
+# Compatible versions
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
+
+# Commands before environment
+before_script:
+  - composer self-update
+  - composer install --prefer-source --no-interaction --dev
+
+# Commands to verify build
+script: phpunit
+
+# Set allow_failures && fast_finish
+matrix:
+  allow_failures:
+    - php: hhvm
+  fast_finish: true
+
+# Customizing notifications -- don't notify right now
+notifications:
+  on_success: never
+  on_failure: never

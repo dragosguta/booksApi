@@ -2,9 +2,6 @@
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-
 Building APIs with Laravel. Exposes 'book' objects with appropriate fields. Built with a LAMP stack. Tests included with phpUnit.
 
 Must set up VM/LAMP environment and include .env as per .env.example
