@@ -20,6 +20,8 @@ script: phpunit
 # Set allow_failures && fast_finish
 matrix:
   allow_failures:
+    - php: 5.4
+    - php: 5.5
     - php: hhvm
   fast_finish: true
 
