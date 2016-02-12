@@ -1,6 +1,6 @@
 # API Implementation using Laravel 5.x
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
+[![Build Status](https://travis-ci.org/dragosguta/booksApi.svg?branch=master)](https://travis-ci.org/dragosguta/booksApi)
 
 Building APIs with Laravel. Exposes 'book' objects with appropriate fields. Built with a LAMP stack. Tests included with phpUnit.
 
