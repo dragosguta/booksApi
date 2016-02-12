@@ -29,10 +29,13 @@ class BooksController extends ApiController
     }
 
     public function index() {
-        $books = Book::paginate(50);
 
-        return $this->setStatusCode(200)->respond([
-            'data' => $this->bookTransformer->transformCollection($books->all())
+        $limit = Input::get('limit') ?: 3;
+
+        $books = Book::paginate($limit);
+
+        return $this->respondWithPagination($books, [
+            'data' => $this->bookTransformer->transformCollection($books->all()),
         ]);
     }
 

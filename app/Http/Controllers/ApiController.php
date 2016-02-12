@@ -5,13 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HTTPResponse;
-
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 class ApiController extends Controller
 {
     protected $statusCode = 200;
+
+     protected function respondWithPagination(LengthAwarePaginator $books, $data) {
+        $data = array_merge($data, [
+            'paginator' => [
+                'total_count' => $books->total(),
+                'current_page'=> $books->currentPage(),
+                'total_pages' => ceil($books->total() / $books->perPage()),
+                'limit'       => $books->perPage()
+            ]
+        ]);
+
+        return $this->respond($data);
+    }
 
     public function getStatusCode() {
         return $this->statusCode;
